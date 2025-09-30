@@ -1,4 +1,5 @@
-##TrueManager
+##TRUESHELL
 
 
-for fun and improving code skills
+
+Building it for fun and practicing 
