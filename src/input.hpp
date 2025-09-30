@@ -18,12 +18,14 @@ public:
         handleCheckD();
     } else if(strcmp(command, "changeD") == 0) {
         handleChangeD();
-    } else if(strcmp(command, "exit") == 0) {
+    } else if(strcmp(command, "createD") == 0) {
+        handleMkDir();
+    } else if(strcmp(command,"exit") == 0){
         handleExit();
-    } else {
+    }else {
         printw("No such command!\n");
         refresh();
-    }
+    } 
 }
 
     private:
@@ -47,7 +49,20 @@ public:
                 printw("Failed changing directory to %s ", dir.getCurrentPath().c_str());
             }
         }
+        void handleMkDir(){
+            printw("Creating a directory, enter name:  \n");
+            refresh();
+            char dirName[PATH_MAX];
+            getstr(dirName);
 
+            if(dir.createDirectory(dirName))
+            {
+                printw("Directory %s", dirName);
+                printw(" succesfully created");
+            } else {
+                printw("Error while creation directory");
+            }
+        }
         void handleExit()
         {
             endwin();

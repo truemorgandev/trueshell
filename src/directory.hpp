@@ -4,6 +4,8 @@
 #include <dirent.h>
 #include <iostream>
 #include <limits.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #ifndef DIRECTORY_HPP
 #define DIRECTORY_HPP
 class Directory {
@@ -33,6 +35,16 @@ class Directory {
             return true;
         }
         return false;
+    }
+
+    bool createDirectory(std::string name)
+    {
+        if(mkdir(name.c_str(),0755) == 0)
+        {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 };
