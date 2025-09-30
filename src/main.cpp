@@ -10,12 +10,12 @@ int main() {
     Directory dir;
     Input input(dir);
 
-    printw("Welcome to MorganManager\n");
+    printw("Welcome to trueshell\n");
+    printw("\n>>> ");
     refresh();
 
     while(true) {
-        printw("\n> "); 
-        refresh();
+        
         input.getCommand();
     }
 

@@ -22,9 +22,16 @@ public:
         handleMkDir();
     } else if(strcmp(command,"exit") == 0){
         handleExit();
-    }else {
+    } else if(strcmp(command, "listF") == 0){
+        handleList();
+    } else if(strcmp(command, "help") == 0){
+        handleHelp();
+    } else if(strcmp(command, "clear") == 0){
+        handleClear();
+    }
+    else {
         printw("No such command!\n");
-        refresh();
+        printPrompt();
     } 
 }
 
@@ -34,6 +41,7 @@ public:
         {
             printw("Current directory is %s ", dir.getCurrentPath().c_str());
             refresh();
+            printPrompt();
         }
 
         void handleChangeD()
@@ -45,9 +53,12 @@ public:
 
             if(dir.changeDirectory(wantedDir)){
                 printw("Directory succsesfully changed to %s ", dir.getCurrentPath().c_str());
+                printPrompt();
             } else {
                 printw("Failed changing directory to %s ", dir.getCurrentPath().c_str());
+                printPrompt();
             }
+            
         }
         void handleMkDir(){
             printw("Creating a directory, enter name:  \n");
@@ -59,16 +70,57 @@ public:
             {
                 printw("Directory %s", dirName);
                 printw(" succesfully created");
+                printPrompt();
             } else {
                 printw("Error while creation directory");
+                printPrompt();
             }
+            
         }
         void handleExit()
         {
             endwin();
             exit(0);
         }
-
+        void handleList()
+        {
+            auto files = dir.listFiles();
+            if(files.empty()){
+                printw("There are no files or cannot open directory %s", dir.getCurrentPath().c_str());
+                refresh();
+            } else {
+                for(auto f : files){
+                    printw("%s\n", f.c_str());
+                    
+                }
+            }
+            printPrompt();
+            
+        }
+        void handleHelp(){
+            printw("Commands:\n ");
+            refresh();
+            printw("changeD *changes directory*\n");
+            refresh();
+            printw("createD *creates directory*\n");
+            refresh();
+            printw("listF *lists files in directory*\n");
+            refresh();
+            printw("clear *clears terminal*\n");
+            refresh();
+            printw("checkD *shows directory you currently in*\n");
+            refresh();
+            printPrompt();
+        }
+        void handleClear()
+        {
+            clear();
+            printPrompt();
+        }
+        void printPrompt() {
+            printw("\n>>> ");
+            refresh();
+}
 
 
 };

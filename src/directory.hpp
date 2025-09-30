@@ -6,6 +6,7 @@
 #include <limits.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <vector>
 #ifndef DIRECTORY_HPP
 #define DIRECTORY_HPP
 class Directory {
@@ -45,6 +46,29 @@ class Directory {
         } else {
             return false;
         }
+    }
+
+    std::vector<std::string> listFiles()
+    {
+        std::vector<std::string> files;
+        DIR* dir = opendir(currentPath.c_str());
+        if(dir == nullptr)
+        {
+            return files;
+        }
+
+        struct dirent* entry;
+        while((entry = readdir(dir)) != nullptr)
+        {
+            std::string name = entry->d_name;
+            if(name == "." || name == "..")
+            {
+                continue;
+            } 
+            files.push_back(name);
+        }
+        closedir(dir);
+        return files;
     }
 
 };
