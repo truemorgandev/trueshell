@@ -47,7 +47,17 @@ class Directory {
             return false;
         }
     }
-
+    bool createFile(std::string name)
+    {
+        std::string fullPath = currentPath + '/' + name;
+        FILE* file = fopen(fullPath.c_str(), "w");
+        if(file != nullptr){
+            return true;
+        } else {
+            fclose(file);
+            return false;
+        }
+    }
     std::vector<std::string> listFiles()
     {
         std::vector<std::string> files;

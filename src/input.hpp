@@ -28,8 +28,9 @@ public:
         handleHelp();
     } else if(strcmp(command, "clear") == 0){
         handleClear();
-    }
-    else {
+    } else if(strcmp(command, "createF") == 0){
+        handleFIleCreation();
+    } else {
         printw("No such command!\n");
         printPrompt();
     } 
@@ -110,6 +111,7 @@ public:
             refresh();
             printw("checkD *shows directory you currently in*\n");
             refresh();
+            printw("createF *creates a file" );
             printPrompt();
         }
         void handleClear()
@@ -120,8 +122,22 @@ public:
         void printPrompt() {
             printw("\n>>> ");
             refresh();
-}
+        }
+        void handleFIleCreation()
+        {
+            printw("Enter file name: \n");
+            refresh();
+            char fileName[PATH_MAX];
+            getstr(fileName);
 
+            if(dir.createFile(fileName)){
+                printw("File %s succsesfully created", fileName);
+                refresh();
+            } else {
+                printw("Failed creating file %s", fileName);
+            }
+            printPrompt();
+        }
 
 };
 
