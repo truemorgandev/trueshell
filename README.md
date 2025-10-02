@@ -1,5 +1,3 @@
-##TRUESHELL
+trueshell
 
-
-
-Building it for fun and practicing 
+trueshell is a minimalistic educational shell written in C++
