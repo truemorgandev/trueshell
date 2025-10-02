@@ -2,6 +2,7 @@
 #define INPUT_HPP
 #include <ncurses.h>
 #include "directory.hpp"
+#include <sstream>
 class Input {
 
 public:
@@ -13,27 +14,29 @@ public:
     void getCommand(){
     
     getstr(command);
+    std::istringstream iss(command);
+    std::string cmd;
+    std::string arg;
 
-    if(strcmp(command, "checkD") == 0) {
+    iss >> cmd;
+    iss >> arg;
+    if(cmd == "cdir"){
         handleCheckD();
-    } else if(strcmp(command, "changeD") == 0) {
-        handleChangeD();
-    } else if(strcmp(command, "createD") == 0) {
-        handleMkDir();
-    } else if(strcmp(command,"exit") == 0){
-        handleExit();
-    } else if(strcmp(command, "listF") == 0){
-        handleList();
-    } else if(strcmp(command, "help") == 0){
-        handleHelp();
-    } else if(strcmp(command, "clear") == 0){
+    } else if(cmd == "adir"){
+        handleChangeD(arg);
+    } else if (cmd == "clear"){
         handleClear();
-    } else if(strcmp(command, "createF") == 0){
-        handleFIleCreation();
-    } else {
-        printw("No such command!\n");
-        printPrompt();
-    } 
+    } else if (cmd == "crdir") {
+        handleMkDir(arg);    
+    } else if(cmd == "lf"){
+        handleList();
+    } else if(cmd == "exit"){
+        handleExit();
+    } else if(cmd == "hp"){
+        handleHelp();
+    } else if(cmd == "cf"){
+        handleFIleCreation(arg);
+    }
 }
 
     private:
@@ -45,13 +48,10 @@ public:
             printPrompt();
         }
 
-        void handleChangeD()
+        void handleChangeD(std::string wantedDir)
         {
-            printw("What directory you wanna change to?\n");
-            refresh();
-            char wantedDir[PATH_MAX];
-            getstr(wantedDir);
-
+        
+           
             if(dir.changeDirectory(wantedDir)){
                 printw("Directory succsesfully changed to %s ", dir.getCurrentPath().c_str());
                 printPrompt();
@@ -61,15 +61,12 @@ public:
             }
             
         }
-        void handleMkDir(){
-            printw("Creating a directory, enter name:  \n");
-            refresh();
-            char dirName[PATH_MAX];
-            getstr(dirName);
+        void handleMkDir(std::string namedir){
+            
 
-            if(dir.createDirectory(dirName))
+            if(dir.createDirectory(namedir))
             {
-                printw("Directory %s", dirName);
+                printw("Directory %s", namedir.c_str());
                 printw(" succesfully created");
                 printPrompt();
             } else {
@@ -98,22 +95,19 @@ public:
             printPrompt();
             
         }
-        void handleHelp(){
-            printw("Commands:\n ");
-            refresh();
-            printw("changeD *changes directory*\n");
-            refresh();
-            printw("createD *creates directory*\n");
-            refresh();
-            printw("listF *lists files in directory*\n");
-            refresh();
-            printw("clear *clears terminal*\n");
-            refresh();
-            printw("checkD *shows directory you currently in*\n");
-            refresh();
-            printw("createF *creates a file" );
-            printPrompt();
-        }
+        void handleHelp() {
+    printw("Available commands:\n");
+    printw("  cdir        - show current directory\n");
+    printw("  adir <dir> - change current directory\n");
+    printw("  crdir <dir> - create new directory\n");
+    printw("  lf         - list files in current directory\n");
+    printw("  cf <file> - create new file\n");
+    printw("  clear         - clear the screen\n");
+    printw("  exit          - quit the shell\n");
+    printw("  hp            - show this help message\n");
+    printPrompt();
+}
+
         void handleClear()
         {
             clear();
@@ -123,18 +117,18 @@ public:
             printw("\n>>> ");
             refresh();
         }
-        void handleFIleCreation()
+        void handleFIleCreation(std::string fname)
         {
-            printw("Enter file name: \n");
-            refresh();
-            char fileName[PATH_MAX];
-            getstr(fileName);
-
-            if(dir.createFile(fileName)){
-                printw("File %s succsesfully created", fileName);
+                if (fname.empty()) {
+            printw("Error: no filename provided\n");
+            printPrompt();
+            return;
+            }
+            if(dir.createFile(fname)){
+                printw("File %s succsesfully created", fname.c_str());
                 refresh();
             } else {
-                printw("Failed creating file %s", fileName);
+                printw("Failed creating file %s", fname.c_str());
             }
             printPrompt();
         }
