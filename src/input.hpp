@@ -36,6 +36,11 @@ public:
         handleHelp();
     } else if(cmd == "cf"){
         handleFIleCreation(arg);
+    } else if(cmd == "onwf"){
+        dir.editFile(arg);
+    } else {
+        printw("There is no such command");
+        printPrompt();
     }
 }
 
@@ -106,7 +111,8 @@ public:
     printw("  exit          - quit the shell\n");
     printw("  hp            - show this help message\n");
     printPrompt();
-}
+}   
+
 
         void handleClear()
         {
